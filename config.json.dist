@@ -1,0 +1,22 @@
+{
+	"trello": {
+		"api_key": "xxxx",
+		"oauth_token": "xxxx",
+		"board_id": "xxxx",
+		"parser": "tmdb"
+	},
+	"parsers": {
+		"igdb": {
+			"user-key": "xxx"
+		},
+		"tmdb": {
+			"apikey": "xxx",
+			"language": "en-EN"
+		}
+	},
+	"react": {
+		"buttons": [
+			{"label": "Play", "url": "http://xxxx/?item=card.title"}
+		]
+	}
+}
