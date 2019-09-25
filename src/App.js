@@ -1,26 +1,35 @@
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
 import fakeDataProvider from 'ra-data-fakerest';
-import {GamesList} from './games';
+import {TrelloList} from './list';
 
-import categories from "./collection.json"
-var data = categories
+
+import collection  from "./collection.json"
+let lists = {}
+let listArray = [];
+for (var i=0; i < collection.length; i++) {
+    var item = collection[i]
+    lists[item.list] = item.list;
+    listArray.push({label: item.list})
+}
+
+var data = [];
+for (var prop in lists) {
+    if (Object.prototype.hasOwnProperty.call(lists, prop)) {
+        data[lists[prop]] = collection.filter(item => (item.list = lists[prop]))
+    }
+}
 
 const dataProvider = fakeDataProvider(data)
-
 const App = () => (
-    <Admin  dataProvider={dataProvider}>
-        <Resource name="owned" options={{ label: 'Collectionés'}} list={GamesList}/>
-        <Resource name="wanted" options={{ label: 'Recherchés'}} list={GamesList} />
-        <Resource name="unrecognized" options={{ label: 'A identifier/classifier'}} list={GamesList} />
-        <Resource name="ds" options={{ label: 'DS / 3DS'}} list={GamesList} />
-        <Resource name="gba" options={{ label: 'Game boy advance'}} list={GamesList} />
-        <Resource name="gbc" options={{ label: 'Game boy color'}} list={GamesList} />
-        <Resource name="gb" options={{ label: 'Game boy'}} list={GamesList} />
-        <Resource name="md" options={{ label: 'Sega Megadrive'}} list={GamesList} />
-        <Resource name="snes" options={{ label: 'Super Nintendo'}} list={GamesList} />
-        <Resource name="wii" options={{ label: 'Wii / Wii u'}} list={GamesList} />
-    </Admin>
+        <Admin dataProvider={dataProvider}>
+        {
+            listArray.map(list => (
+                <Resource name={list.label} options={{label: `${list.label}`}} list={TrelloList}/>
+            ))
+        }
+        </Admin>
+
 );
 
 export default App

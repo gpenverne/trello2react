@@ -3,6 +3,7 @@ install:
 	cp config.json.dist config.json
 fetch:
 	nodejs src/Fetch.js
+	cp data.json src/collection.json
 
 start: fetch
 	npm start
