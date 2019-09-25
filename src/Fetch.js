@@ -9,11 +9,13 @@ oauthToken = config.trello.oauth_token;
 
 const Trello = require('trello-node-api')(apiKey, oauthToken);
 let localData = {};
+let collectionData = {};
 var res = request('GET', `https://api.trello.com/1/board/${boardId}/lists?key=${apiKey}&token=${oauthToken}`);
 var data = JSON.parse(res.getBody('utf8'));
 var lists = {};
 data.forEach(function(list){
 	lists[list.id] = list.name;
+	collectionData[list.name] = [];
 });
 
 Trello.board.searchCards(boardId).then(function(response) {
@@ -41,10 +43,12 @@ Trello.board.searchCards(boardId).then(function(response) {
             'cover': card.cover,
             'list': lists[cardResponse.idList]
         }
+		collectionData[lists[cardResponse.idList]].push(localData[cardResponse.name]);
         cardResponse.idAttachmentCover = data['id'];
 		cardResponse.desc = card.desc;
         Trello.card.update(cardResponse.id, cardResponse);
 
 	});
     fs.writeFileSync('data.json', JSON.stringify(localData, null, 2));
+	fs.writeFileSync('src/collection.json', JSON.stringify(collectionData, null, 2));
 });
