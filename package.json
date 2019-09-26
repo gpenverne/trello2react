@@ -1,8 +1,8 @@
 {
-  "name": "trello-to-react",
+  "name": "trello2react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vigorous-goldwasser-bbdcc7.netlify.com/",
+  "homepage": "https://github.com/gpenverne/trello2react",
   "dependencies": {
     "apicalypse": "^0.1.6",
     "igdb-api-node": "^4.0.3",
