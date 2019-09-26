@@ -10,5 +10,4 @@ start: fetch
 
 build: fetch
 	npm run-script build
-	rm -rf build||echo "build folder does not exist"
 	mv build/200.html build/index.html
