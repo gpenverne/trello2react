@@ -1,4 +1,5 @@
 # TrelloToReact
+Generate a react-admin UI for your trello board
 
 ## Install
 ```bash

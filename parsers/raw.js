@@ -1,11 +1,8 @@
-/**
-* Parser for http://www.omdbapi.com/ - The Open Movie Database
-*/
-const request = require('sync-request');
-const config = require('../config.json');
+const request = require('sync-request')
+const config = require('../config.json')
 
 module.exports = {
-	fetchCard: function(Trello, card, callback) {
+	fetchCard: (Trello, card, callback) => {
 		let cardTitle = card.name;
 		return {
 			"id": card.id,
@@ -13,7 +10,6 @@ module.exports = {
 			"desc": card.desc,
 			"parserId": card.id,
 			"cover": null
-		};
-
+		}
 	}
 }
