@@ -25,7 +25,7 @@ module.exports = {
 				var result = data.results[i];
 				return {
 					"id": card.id,
-					"db_id": result.id,
+					"parserId": result.id,
 					"title": result.title,
 					"desc": result.overview,
 					"cover": `https://image.tmdb.org/t/p/w500_and_h282_face/${result.poster_path}`

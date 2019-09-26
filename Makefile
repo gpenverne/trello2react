@@ -2,8 +2,8 @@ install:
 	npm install
 	cp config.json.dist config.json
 fetch:
+	touch data.json||echo ""
 	nodejs src/Fetch.js
-	cp data.json src/collection.json
 
 start: fetch
 	npm start

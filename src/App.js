@@ -2,9 +2,8 @@ import React from 'react';
 import { Admin, Resource } from 'react-admin';
 import fakeDataProvider from 'ra-data-fakerest';
 import {TrelloList} from './list';
-
-
 import collection  from "./collection.json"
+
 let lists = {}
 let listArray = [];
 for (var i=0; i < collection.length; i++) {
@@ -16,10 +15,10 @@ for (var i=0; i < collection.length; i++) {
 var data = [];
 for (var prop in lists) {
     if (Object.prototype.hasOwnProperty.call(lists, prop)) {
-        data[lists[prop]] = collection.filter(item => (item.list = lists[prop]))
+        var list = lists[prop];
+        data[lists[prop]] = collection.filter(item => (item.list == list))
     }
 }
-
 const dataProvider = fakeDataProvider(data)
 const App = () => (
         <Admin dataProvider={dataProvider}>

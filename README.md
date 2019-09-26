@@ -9,3 +9,4 @@ make install + update config.json
 - add description in card
 - add imdb parser
 - add igdb parser
+- trello oauth

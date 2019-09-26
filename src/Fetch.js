@@ -1,4 +1,5 @@
 const config = require('../config.json');
+const knownData = require('../data.json');
 const parser = require('../parsers/'+config.trello.parser+'.js')
 const request = require('sync-request');
 const fs = require('fs');
@@ -9,10 +10,18 @@ oauthToken = config.trello.oauth_token;
 
 const Trello = require('trello-node-api')(apiKey, oauthToken);
 let localData = {};
-let collectionData = {};
+let collectionData = [];
 var res = request('GET', `https://api.trello.com/1/board/${boardId}/lists?key=${apiKey}&token=${oauthToken}`);
 var data = JSON.parse(res.getBody('utf8'));
 var lists = {};
+var knownItems = [];
+
+for (var prop in knownData) {
+    if (Object.prototype.hasOwnProperty.call(knownData, prop)) {
+        knownItems.push(knownData[prop].cardId)
+    }
+}
+
 data.forEach(function(list){
 	lists[list.id] = list.name;
 	collectionData[list.name] = {
@@ -23,8 +32,11 @@ data.forEach(function(list){
 
 Trello.board.searchCards(boardId).then(function(response) {
 	response.forEach(function(cardResponse){
+		if (knownItems.indexOf(cardResponse.id) > -1) {
+			return;
+		}
 		card = parser.fetchCard(Trello, cardResponse);
-		if (!card) {
+		if (!card || !card.cover) {
 			console.log('Unable to find `'+cardResponse.name+'`');
             return;
 		}
@@ -44,13 +56,15 @@ Trello.board.searchCards(boardId).then(function(response) {
             'title': cardResponse.name,
             'shortUrl': cardResponse.shortUrl,
             'cover': card.cover,
-            'list': lists[cardResponse.idList]
+            'list': lists[cardResponse.idList],
+			'parserId': card.parserId
         }
-		collectionData[lists[cardResponse.idList]].items.push(localData[cardResponse.name]);
+		collectionData.push(localData[cardResponse.name]);
         cardResponse.idAttachmentCover = data['id'];
 		cardResponse.desc = card.desc;
         Trello.card.update(cardResponse.id, cardResponse);
 
 	});
     fs.writeFileSync('data.json', JSON.stringify(localData, null, 2));
+	fs.writeFileSync('src/collection.json', JSON.stringify(collectionData, null, 2));
 });
